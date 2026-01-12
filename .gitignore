@@ -1,0 +1,17 @@
+# Backups
+*.backup
+*.backup[0-9]
+
+# Logs
+*.log
+
+# Temporary files
+*~
+.*.swp
+
+# KDE cache
+.directory
+
+# Agent working directories (optional - may include later)
+.grok/
+.gemini/
