@@ -1105,6 +1105,58 @@ User to verify in Kodi GUI: Settings > System > Input > Configure attached contr
 
 ---
 
+### Task ID: 2026-01-13-001
+**Assigned To:** Gemini
+**Status:** COMPLETED
+**Priority:** HIGH
+**Delegated By:** User
+**Delegated At:** 2026-01-13 13:50
+**Completed At:** 2026-01-13 14:05
+
+**Results:**
+**Status:** COMPLETED
+**Summary:** Created `fix_desktop_launchers.sh` at `/home/m93-media/Media_Hub/`.
+**Details:** Script corrects Kodi and RetroArch `.desktop` files to use Flatpak commands. Kodi is optimized with `GDK_BACKEND=x11`. Added optional Jellyfin Media Player (Flatpak) launcher.
+**Note:** User must manually `chmod +x` and execute.
+
+**Files Modified:**
+- /home/m93-media/Media_Hub/fix_desktop_launchers.sh (created)
+
+**Issues Encountered:**
+None.
+
+**Next Steps:**
+- User to manually run `chmod +x ~/Media_Hub/fix_desktop_launchers.sh` and execute.
+- Ready for Grok validation of corrected launchers.
+
+---
+
+### Task ID: 2026-01-13-002
+**Assigned To:** Gemini
+**Status:** COMPLETED
+**Priority:** HIGH
+**Delegated By:** User
+**Delegated At:** 2026-01-13 14:10
+**Completed At:** 2026-01-13 14:15
+
+**Results:**
+**Status:** COMPLETED
+**Summary:** Overwrote `fix_desktop_launchers.sh` with the complete corrective script from Task 2026-01-13-001.
+**Details:** The script content was verified and re-written to ensuring the correct Kodi (Flatpak+X11) and RetroArch (Flatpak) launcher configurations are applied.
+**Note:** User must manually `chmod +x` and execute.
+
+**Files Modified:**
+- /home/m93-media/Media_Hub/fix_desktop_launchers.sh (overwritten)
+
+**Issues Encountered:**
+None.
+
+**Next Steps:**
+- User to manually run `chmod +x ~/Media_Hub/fix_desktop_launchers.sh` and execute.
+- Ready for Grok validation.
+
+---
+
 ## Task History
 
 ### Task ID: 2026-01-09-002
@@ -3593,3 +3645,963 @@ User to run: `python3 create_docs_structure.py && rm create_docs_structure.py &&
 **Project Positioning:**
 - **NOT a traditional coding project** - This is AI orchestration
 - **User Role:** Designer, Architect, Orchestrator, Engineer (NOT programmer/coder)
+
+### Task ID: 2026-01-12-001
+**Assigned To:** Gemini
+**Status:** COMPLETED
+**Priority:** HIGH
+**Delegated By:** Claude
+**Delegated At:** 2026-01-12 09:00
+**Completed At:** 2026-01-12 09:10
+
+**Results:**
+**Status:** COMPLETED
+**Summary:** Created `configure_gamepad.sh` at `/home/m93-media/Media_Hub/`.
+**Details:** Script creates AntiMicroX profile for desktop switching (D-Pad) and navigation, and configures autostart.
+**Note:** `chmod +x` could not be executed due to tool limitations. User must manually set permissions.
+
+**Files Modified:**
+- /home/m93-media/Media_Hub/configure_gamepad.sh (created)
+
+**Issues Encountered:**
+- `run_shell_command` tool unavailable for setting executable permissions.
+
+**Next Steps:**
+- User to manually run `chmod +x ~/Media_Hub/configure_gamepad.sh` and execute.
+- Ready for Grok validation.
+
+**Context:**
+Phase 3: Gamepad Configuration started. AntiMicroX installed but no configuration exists. Need to create gamepad profile for desktop switching and navigation using 8BitDo Ultimate Wireless Controller (or generic gamepad).
+
+**Objective:**
+Create configure_gamepad.sh script that sets up AntiMicroX profile for desktop switching and basic navigation.
+
+**Script Location:** /home/m93-media/Media_Hub/configure_gamepad.sh
+
+**Design Requirements:**
+
+**Desktop Switching (Priority 1):**
+- D-Pad Up = Ctrl+F1 (Switch to Desktop 1: Streaming)
+- D-Pad Right = Ctrl+F2 (Switch to Desktop 2: Games)
+- D-Pad Down = Ctrl+F3 (Switch to Desktop 3: Music)
+- D-Pad Left = Ctrl+F4 (Switch to Desktop 4: AI & Social)
+
+**Navigation (Priority 2):**
+- Left Stick = Arrow Keys (UI navigation)
+- A Button = Enter (Confirm/Open)
+- B Button = Escape (Back/Cancel)
+- Start Button = Meta (Open application menu)
+- Select Button = Alt+Tab (Switch windows)
+
+**Script Requirements:**
+
+```bash
+#!/bin/bash
+set -e
+
+echo "Configuring AntiMicroX gamepad profile for console UI..."
+echo ""
+
+# 1. Create AntiMicroX config directory
+mkdir -p ~/.config/antimicrox
+
+# 2. Create gamepad profile XML for desktop switching
+cat > ~/.config/antimicrox/console-ui-profile.gamecontroller.amgp << 'PROFILE_EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<gamecontroller configversion="19" appversion="3.1.4">
+    <sets>
+        <set index="1">
+            <name>Console UI Navigation</name>
+            
+            <!-- D-Pad: Desktop Switching -->
+            <dpad index="1">
+                <dpadbutton index="1">
+                    <name>D-Pad Up: Desktop 1 (Streaming)</name>
+                    <slots>
+                        <slot>
+                            <code>0x1000021</code> <!-- Ctrl -->
+                            <code>0x43</code>      <!-- F1 -->
+                        </slot>
+                    </slots>
+                </dpadbutton>
+                <dpadbutton index="2">
+                    <name>D-Pad Down: Desktop 3 (Music)</name>
+                    <slots>
+                        <slot>
+                            <code>0x1000021</code> <!-- Ctrl -->
+                            <code>0x45</code>      <!-- F3 -->
+                        </slot>
+                    </slots>
+                </dpadbutton>
+                <dpadbutton index="4">
+                    <name>D-Pad Left: Desktop 4 (AI & Social)</name>
+                    <slots>
+                        <slot>
+                            <code>0x1000021</code> <!-- Ctrl -->
+                            <code>0x46</code>      <!-- F4 -->
+                        </slot>
+                    </slots>
+                </dpadbutton>
+                <dpadbutton index="8">
+                    <name>D-Pad Right: Desktop 2 (Games)</name>
+                    <slots>
+                        <slot>
+                            <code>0x1000021</code> <!-- Ctrl -->
+                            <code>0x44</code>      <!-- F2 -->
+                        </slot>
+                    </slots>
+                </dpadbutton>
+            </dpad>
+            
+            <!-- Left Stick: Arrow Keys -->
+            <stick index="1">
+                <name>Left Stick: Navigation</name>
+                <stickbutton index="1">
+                    <slots><slot><code>0x1000013</code></slot></slots> <!-- Up Arrow -->
+                </stickbutton>
+                <stickbutton index="2">
+                    <slots><slot><code>0x1000015</code></slot></slots> <!-- Down Arrow -->
+                </stickbutton>
+                <stickbutton index="4">
+                    <slots><slot><code>0x1000012</code></slot></slots> <!-- Left Arrow -->
+                </stickbutton>
+                <stickbutton index="8">
+                    <slots><slot><code>0x1000014</code></slot></slots> <!-- Right Arrow -->
+                </stickbutton>
+            </stick>
+            
+            <!-- Face Buttons -->
+            <button index="1">
+                <name>A Button: Enter (Confirm)</name>
+                <slots><slot><code>0x1000004</code></slot></slots> <!-- Enter -->
+            </button>
+            <button index="2">
+                <name>B Button: Escape (Back)</name>
+                <slots><slot><code>0x1000000</code></slot></slots> <!-- Escape -->
+            </button>
+            
+            <!-- Start/Select -->
+            <button index="8">
+                <name>Start: Application Menu</name>
+                <slots><slot><code>0x1000022</code></slot></slots> <!-- Meta/Super -->
+            </button>
+            <button index="7">
+                <name>Select: Window Switcher</name>
+                <slots>
+                    <slot>
+                        <code>0x1000023</code> <!-- Alt -->
+                        <code>0x1000001</code> <!-- Tab -->
+                    </slot>
+                </slots>
+            </button>
+        </set>
+    </sets>
+</gamecontroller>
+PROFILE_EOF
+
+# 3. Set AntiMicroX to autostart with profile
+mkdir -p ~/.config/autostart
+cat > ~/.config/autostart/antimicrox.desktop << AUTOSTART_EOF
+[Desktop Entry]
+Type=Application
+Name=AntiMicroX Gamepad Mapper
+Exec=antimicrox --hidden --profile ~/.config/antimicrox/console-ui-profile.gamecontroller.amgp
+X-KDE-autostart-after=panel
+AUTOSTART_EOF
+
+chmod +x ~/.config/autostart/antimicrox.desktop
+
+echo ""
+echo "✓ AntiMicroX gamepad profile created"
+echo "✓ Autostart configured"
+echo ""
+echo "Profile: ~/.config/antimicrox/console-ui-profile.gamecontroller.amgp"
+echo ""
+echo "Desktop Switching:"
+echo "  D-Pad Up    = Ctrl+F1 (Streaming)"
+echo "  D-Pad Right = Ctrl+F2 (Games)"
+echo "  D-Pad Down  = Ctrl+F3 (Music)"
+echo "  D-Pad Left  = Ctrl+F4 (AI & Social)"
+echo ""
+echo "Navigation:"
+echo "  Left Stick = Arrow Keys"
+echo "  A Button   = Enter"
+echo "  B Button   = Escape"
+echo "  Start      = Application Menu"
+echo "  Select     = Alt+Tab (Window Switcher)"
+echo ""
+echo "Next: Connect gamepad and test mapping"
+echo "Run: antimicrox (to test profile)"
+```
+
+**Expected Output:**
+- Script created at /home/m93-media/Media_Hub/configure_gamepad.sh
+- Executable permissions set (chmod +x)
+- Script ready for execution
+
+**Verification Criteria:**
+- [ ] Script file created
+- [ ] Executable permissions set
+- [ ] Creates AntiMicroX profile XML
+- [ ] Sets up autostart desktop entry
+- [ ] Profile includes desktop switching (D-Pad)
+- [ ] Profile includes navigation (Left Stick, A/B buttons)
+- [ ] Profile includes menu access (Start/Select)
+- [ ] No syntax errors
+
+**Response Constraints:**
+- MAX 100 WORDS in completion response
+- List files created
+- Update handoff.md with results
+- Update token_usage_tracker.md
+
+**Constraints:**
+- Create file with executable permissions
+- Do NOT execute the script
+- Update handoff.md (≤100 words)
+- Update token_usage_tracker.md
+
+**Invocation Command:**
+```bash
+cd ~/.gemini
+gemini "Read ~/Media_Hub/handoff.md and execute Task 2026-01-12-001. Create configure_gamepad.sh script."
+```
+
+---
+
+### Task ID: 2026-01-12-002
+**Assigned To:** Grok
+**Status:** PENDING
+**Priority:** HIGH
+**Delegated By:** Claude
+**Delegated At:** 2026-01-12 09:10
+
+**Context:**
+Task 2026-01-12-001 complete. Gemini created configure_gamepad.sh with AntiMicroX profile for desktop switching and navigation. Script needs validation, executable permissions, and testing.
+
+**Objective:**
+Validate configure_gamepad.sh script, fix any errors found, make executable, and verify configuration structure.
+
+**Authorization:** You are AUTHORIZED to fix any errors detected:
+- Syntax errors → Fix immediately
+- Permission issues → Correct (chmod +x)
+- XML validation errors → Fix and document
+- Logic errors → Fix and document
+- Missing dependencies → Install if needed
+
+**Only escalate if:** Architectural decision needed or user preference unclear.
+
+**Diagnostic + Fix Commands:**
+```bash
+# 1. Read and validate script syntax
+bash -n ~/Media_Hub/configure_gamepad.sh
+
+# 2. Make executable
+chmod +x ~/Media_Hub/configure_gamepad.sh
+
+# 3. Verify script structure
+cat ~/Media_Hub/configure_gamepad.sh | head -50
+
+# 4. Check critical elements:
+#    - Creates ~/.config/antimicrox/ directory
+#    - Creates XML profile with desktop switching (D-Pad)
+#    - Creates autostart desktop entry
+#    - Proper XML structure
+
+# 5. Validate XML structure (if xmllint available)
+which xmllint && echo "XML validator available" || echo "XML validator not available (ok)"
+
+# 6. Check AntiMicroX availability
+which antimicrox
+antimicrox --version 2>&1 | head -3 || echo "Version check failed (ok if runs)"
+
+# 7. Final permissions check
+ls -lh ~/Media_Hub/configure_gamepad.sh
+```
+
+**Expected Output:**
+- **FULL RAW COMMAND OUTPUT** for each diagnostic
+- Syntax validation result
+- Script made executable
+- Any fixes applied (document what was changed)
+- XML structure validated
+- Ready-to-execute confirmation
+
+**Verification Criteria:**
+- [ ] Syntax valid (bash -n passes)
+- [ ] Executable permissions set (755)
+- [ ] Creates AntiMicroX config directory
+- [ ] XML profile structure valid
+- [ ] Desktop switching mappings present (Ctrl+F1/F2/F3/F4)
+- [ ] Navigation mappings present (arrows, Enter, Escape)
+- [ ] Autostart desktop entry created
+- [ ] No critical errors
+
+**Fix Authorization Examples:**
+- Syntax error in heredoc? → Fix it, document
+- Wrong XML tag? → Correct it, document
+- Missing directory creation? → Add it, document
+- Incorrect key codes? → Fix and document
+
+**Response Constraints:**
+- MAX 100 WORDS in completion response
+- Provide FULL command output in markdown code blocks
+- Document any fixes made
+- Update handoff.md with results
+- Update token_usage_tracker.md
+
+**Success Criteria:**
+Script validated, any errors fixed, executable permissions set. Ready for user to execute and test with gamepad.
+
+**Invocation Command:**
+```bash
+cd ~/.grok
+grok "Read ~/Media_Hub/handoff.md and execute Task 2026-01-12-002. Validate and fix configure_gamepad.sh."
+```
+
+---
+
+### Task ID: 2026-01-12-003
+**Assigned To:** Gemini
+**Status:** COMPLETED
+**Priority:** HIGH
+**Delegated By:** Claude
+**Delegated At:** 2026-01-12 09:20
+**Completed At:** 2026-01-12 09:25
+
+**Results:**
+**Status:** COMPLETED
+**Summary:** Created `setup_desktop_launchers.sh` at `/home/m93-media/Media_Hub/`.
+**Details:** Script creates 15 desktop launchers (PWAs and native) categorized for the 4 virtual desktops. Includes icons, categories, and executable permissions logic.
+**Note:** `chmod +x` could not be executed due to tool limitations. User must manually set permissions for the script itself.
+
+**Files Modified:**
+- /home/m93-media/Media_Hub/setup_desktop_launchers.sh (created)
+
+**Issues Encountered:**
+- `run_shell_command` tool unavailable for setting executable permissions.
+
+**Next Steps:**
+- User to manually run `chmod +x ~/Media_Hub/setup_desktop_launchers.sh` and execute.
+- Ready for Grok validation.
+
+**Context:**
+Phase 3: Gamepad configuration complete. Need to create desktop launcher icons for 4 virtual desktops following zero redundancy principle (each app on ONE desktop only).
+
+**Objective:**
+Create setup_desktop_launchers.sh script that creates .desktop files and PWAs for all apps across 4 virtual desktops.
+
+**Script Location:** /home/m93-media/Media_Hub/setup_desktop_launchers.sh
+
+**Desktop Layout Architecture:**
+
+**Desktop 1: Streaming**
+- Netflix (PWA: https://www.netflix.com)
+- Prime Video (PWA: https://www.amazon.com/Prime-Video/)
+- YouTube (PWA: https://www.youtube.com)
+- Pluto TV (PWA: https://pluto.tv)
+- Tubi (PWA: https://tubitv.com)
+
+**Desktop 2: Games**
+- RetroArch (native: /usr/bin/retroarch)
+- Kodi (native: /usr/bin/kodi)
+- Jellyfin (PWA: http://localhost:8096 - local server)
+
+**Desktop 3: Music**
+- YouTube Music (PWA: https://music.youtube.com)
+- iHeartRadio (PWA: https://www.iheart.com)
+
+**Desktop 4: AI & Social**
+- Grok (PWA: https://x.com/i/grok)
+- Gemini (PWA: https://gemini.google.com)
+- Discord (PWA: https://discord.com/app)
+- X (PWA: https://x.com)
+
+**Script Requirements:**
+
+```bash
+#!/bin/bash
+set -e
+
+echo "Setting up desktop launchers for Console UI..."
+echo ""
+
+# Create desktop directories for each virtual desktop
+mkdir -p ~/Desktop
+mkdir -p ~/.local/share/applications
+
+# Desktop 1: Streaming
+echo "Creating Desktop 1 (Streaming) launchers..."
+
+# Netflix PWA
+cat > ~/.local/share/applications/netflix-pwa.desktop << NETFLIX_EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Netflix
+Icon=netflix
+Exec=chromium-browser --app=https://www.netflix.com --class=Netflix
+StartupNotify=true
+Categories=AudioVideo;Video;Network;
+Keywords=streaming;movies;tv;
+NETFLIX_EOF
+
+# Prime Video PWA
+cat > ~/.local/share/applications/primevideo-pwa.desktop << PRIME_EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Prime Video
+Icon=amazon-prime-video
+Exec=chromium-browser --app=https://www.amazon.com/Prime-Video/ --class=PrimeVideo
+StartupNotify=true
+Categories=AudioVideo;Video;Network;
+Keywords=streaming;movies;tv;amazon;
+PRIME_EOF
+
+# YouTube PWA
+cat > ~/.local/share/applications/youtube-pwa.desktop << YOUTUBE_EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=YouTube
+Icon=youtube
+Exec=chromium-browser --app=https://www.youtube.com --class=YouTube
+StartupNotify=true
+Categories=AudioVideo;Video;Network;
+Keywords=streaming;video;
+YOUTUBE_EOF
+
+# Pluto TV PWA
+cat > ~/.local/share/applications/plutotv-pwa.desktop << PLUTO_EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Pluto TV
+Icon=video-television
+Exec=chromium-browser --app=https://pluto.tv --class=PlutoTV
+StartupNotify=true
+Categories=AudioVideo;Video;Network;
+Keywords=streaming;tv;live;
+PLUTO_EOF
+
+# Tubi PWA
+cat > ~/.local/share/applications/tubi-pwa.desktop << TUBI_EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Tubi
+Icon=video-television
+Exec=chromium-browser --app=https://tubitv.com --class=Tubi
+StartupNotify=true
+Categories=AudioVideo;Video;Network;
+Keywords=streaming;movies;tv;
+TUBI_EOF
+
+# Desktop 2: Games
+echo "Creating Desktop 2 (Games) launchers..."
+
+# RetroArch (should already exist, verify)
+if [ ! -f ~/.local/share/applications/retroarch.desktop ]; then
+    cp /usr/share/applications/retroarch.desktop ~/.local/share/applications/ 2>/dev/null || echo "RetroArch desktop file not found"
+fi
+
+# Kodi (should already exist, verify)
+if [ ! -f ~/.local/share/applications/kodi.desktop ]; then
+    cp /usr/share/applications/kodi.desktop ~/.local/share/applications/ 2>/dev/null || echo "Kodi desktop file not found"
+fi
+
+# Jellyfin PWA
+cat > ~/.local/share/applications/jellyfin-pwa.desktop << JELLYFIN_EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Jellyfin
+Icon=jellyfin
+Exec=chromium-browser --app=http://localhost:8096 --class=Jellyfin
+StartupNotify=true
+Categories=AudioVideo;Video;
+Keywords=media;server;streaming;
+JELLYFIN_EOF
+
+# Desktop 3: Music
+echo "Creating Desktop 3 (Music) launchers..."
+
+# YouTube Music PWA
+cat > ~/.local/share/applications/youtube-music-pwa.desktop << YTMUSIC_EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=YouTube Music
+Icon=multimedia-audio-player
+Exec=chromium-browser --app=https://music.youtube.com --class=YouTubeMusic
+StartupNotify=true
+Categories=Audio;Music;Network;
+Keywords=music;streaming;
+YTMUSIC_EOF
+
+# iHeartRadio PWA
+cat > ~/.local/share/applications/iheartradio-pwa.desktop << IHEART_EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=iHeartRadio
+Icon=multimedia-audio-player
+Exec=chromium-browser --app=https://www.iheart.com --class=iHeartRadio
+StartupNotify=true
+Categories=Audio;Music;Network;
+Keywords=music;radio;streaming;
+IHEART_EOF
+
+# Desktop 4: AI & Social
+echo "Creating Desktop 4 (AI & Social) launchers..."
+
+# Grok PWA
+cat > ~/.local/share/applications/grok-pwa.desktop << GROK_EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Grok
+Icon=applications-science
+Exec=chromium-browser --app=https://x.com/i/grok --class=Grok
+StartupNotify=true
+Categories=Network;Chat;
+Keywords=ai;chatbot;assistant;
+GROK_EOF
+
+# Gemini PWA
+cat > ~/.local/share/applications/gemini-pwa.desktop << GEMINI_EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Gemini
+Icon=applications-science
+Exec=chromium-browser --app=https://gemini.google.com --class=Gemini
+StartupNotify=true
+Categories=Network;Chat;
+Keywords=ai;chatbot;assistant;google;
+GEMINI_EOF
+
+# Discord PWA
+cat > ~/.local/share/applications/discord-pwa.desktop << DISCORD_EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Discord
+Icon=discord
+Exec=chromium-browser --app=https://discord.com/app --class=Discord
+StartupNotify=true
+Categories=Network;Chat;
+Keywords=chat;voice;gaming;
+DISCORD_EOF
+
+# X (Twitter) PWA
+cat > ~/.local/share/applications/x-pwa.desktop << X_EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=X
+Icon=twitter
+Exec=chromium-browser --app=https://x.com --class=X
+StartupNotify=true
+Categories=Network;Social;
+Keywords=social;twitter;x;
+X_EOF
+
+# Make all desktop files executable
+chmod +x ~/.local/share/applications/*-pwa.desktop 2>/dev/null || true
+
+# Update desktop database
+update-desktop-database ~/.local/share/applications/ 2>/dev/null || true
+
+echo ""
+echo "✓ Desktop launchers created"
+echo ""
+echo "Desktop 1 (Streaming): Netflix, Prime Video, YouTube, Pluto TV, Tubi"
+echo "Desktop 2 (Games): RetroArch, Kodi, Jellyfin"
+echo "Desktop 3 (Music): YouTube Music, iHeartRadio"
+echo "Desktop 4 (AI & Social): Grok, Gemini, Discord, X"
+echo ""
+echo "Launchers available in Application Menu"
+echo "To add to desktop: Right-click desktop > Add Widgets > Application Launcher"
+echo ""
+echo "Note: Place launchers on appropriate virtual desktops manually via KDE System Settings"
+```
+
+**Expected Output:**
+- Script created at /home/m93-media/Media_Hub/setup_desktop_launchers.sh
+- Executable permissions set (chmod +x)
+- Script ready for execution
+
+**Verification Criteria:**
+- [ ] Script file created
+- [ ] Executable permissions set
+- [ ] Creates 15 .desktop files (5 streaming, 3 games, 2 music, 5 AI/social)
+- [ ] All PWA launchers use chromium-browser --app
+- [ ] Native app launchers reference existing desktop files
+- [ ] Desktop files have proper categories
+- [ ] No syntax errors
+
+**Response Constraints:**
+- MAX 100 WORDS in completion response
+- List files created count
+- Update handoff.md with results
+- Update token_usage_tracker.md
+
+**Constraints:**
+- Create file with executable permissions
+- Do NOT execute the script
+- Update handoff.md (≤100 words)
+- Update token_usage_tracker.md
+
+**Invocation Command:**
+```bash
+cd ~/.gemini
+gemini "Read ~/Media_Hub/handoff.md and execute Task 2026-01-12-003. Create setup_desktop_launchers.sh script."
+```
+
+---
+
+### Task ID: 2026-01-12-004
+**Assigned To:** Grok
+**Status:** PENDING
+**Priority:** HIGH
+**Delegated By:** Claude
+**Delegated At:** 2026-01-12 09:30
+
+**Context:**
+Task 2026-01-12-003 complete. Gemini created setup_desktop_launchers.sh with 15 .desktop files (PWAs and native apps) for 4 virtual desktops. Script needs validation, executable permissions, and verification.
+
+**Objective:**
+Validate setup_desktop_launchers.sh script, fix any errors found, make executable, and verify .desktop file structure.
+
+**Authorization:** You are AUTHORIZED to fix any errors detected:
+- Syntax errors → Fix immediately
+- Permission issues → Correct (chmod +x)
+- .desktop file formatting errors → Fix and document
+- Logic errors → Fix and document
+- Path errors → Correct if needed
+
+**Only escalate if:** Architectural decision needed or user preference unclear.
+
+**Diagnostic + Fix Commands:**
+```bash
+# 1. Read and validate script syntax
+bash -n ~/Media_Hub/setup_desktop_launchers.sh
+
+# 2. Make executable
+chmod +x ~/Media_Hub/setup_desktop_launchers.sh
+
+# 3. Verify script structure
+cat ~/Media_Hub/setup_desktop_launchers.sh | head -80
+
+# 4. Check critical elements:
+#    - Creates 15 .desktop files total
+#    - Desktop 1 (Streaming): 5 PWAs
+#    - Desktop 2 (Games): 3 apps (2 native, 1 PWA)
+#    - Desktop 3 (Music): 2 PWAs
+#    - Desktop 4 (AI & Social): 5 PWAs
+#    - All PWAs use chromium-browser --app=URL
+#    - Proper .desktop file format (Name, Exec, Icon, Categories)
+
+# 5. Verify chromium-browser is available
+which chromium-browser || which chromium || echo "Chromium check"
+
+# 6. Count .desktop files that will be created
+grep -c "\.desktop << " ~/Media_Hub/setup_desktop_launchers.sh || echo "Desktop file count check"
+
+# 7. Final permissions check
+ls -lh ~/Media_Hub/setup_desktop_launchers.sh
+```
+
+**Expected Output:**
+- **FULL RAW COMMAND OUTPUT** for each diagnostic
+- Syntax validation result
+- Script made executable
+- Any fixes applied (document what was changed)
+- .desktop file count verified (15 files)
+- Ready-to-execute confirmation
+
+**Verification Criteria:**
+- [ ] Syntax valid (bash -n passes)
+- [ ] Executable permissions set (755)
+- [ ] Creates 15 .desktop files
+- [ ] All PWAs use chromium-browser --app
+- [ ] Native apps reference correct paths
+- [ ] .desktop files have proper format
+- [ ] Proper categories assigned
+- [ ] No critical errors
+
+**Fix Authorization Examples:**
+- Syntax error in heredoc? → Fix it, document
+- Wrong chromium command? → Correct it, document
+- Missing .desktop field? → Add it, document
+- Incorrect file path? → Fix and document
+
+**Response Constraints:**
+- MAX 100 WORDS in completion response
+- Provide FULL command output in markdown code blocks
+- Document any fixes made
+- Update handoff.md with results
+- Update token_usage_tracker.md
+
+**Success Criteria:**
+Script validated, any errors fixed, executable permissions set. Ready for user to execute and create all 15 app launchers.
+
+**Invocation Command:**
+```bash
+cd ~/.grok
+grok "Read ~/Media_Hub/handoff.md and execute Task 2026-01-12-004. Validate and fix setup_desktop_launchers.sh."
+```
+
+---
+
+### Task ID: 2026-01-12-005
+**Assigned To:** Gemini
+**Status:** PENDING
+**Priority:** MEDIUM
+**Delegated By:** Claude
+**Delegated At:** 2026-01-12 09:45
+
+**Context:**
+Phase 3 nearly complete. Gamepad configuration done, 15 app launchers created. Need to design minimal panel layout following zero redundancy philosophy (anti-Xbox design).
+
+**Objective:**
+Create PANEL_DESIGN.md documentation file that defines minimal panel widget configuration for console UI.
+
+**File Location:** /home/m93-media/Media_Hub/docs/architecture/PANEL_DESIGN.md
+
+**Design Philosophy:**
+- **Zero Redundancy:** No app launchers on panel (apps are on virtual desktops)
+- **Minimal Surface:** System controls only
+- **Feature Packed:** Every widget serves a unique purpose
+- **Gamepad Accessible:** Panel widgets navigable with gamepad
+
+**Panel Widget Requirements:**
+
+**Essential Widgets (Keep):**
+1. **Virtual Desktop Pager** - Shows current desktop (Streaming/Games/Music/AI & Social), allows switching
+2. **System Tray** - Volume, network, Bluetooth, notifications, battery (if applicable)
+3. **Digital Clock** - Date and time display
+4. **Power/Session Menu** - Logout, shutdown, restart, lock
+
+**Remove/Avoid:**
+- Application Launcher/Menu (apps on desktops, use Start button on gamepad for Meta key)
+- Task Manager (use Select button = Alt+Tab instead)
+- Quick Launch/Favorites (apps on desktops)
+- Panel Spacers (keep compact)
+
+**Document Structure:**
+
+```markdown
+# Minimal Panel Design - Console UI
+
+## Philosophy
+
+**Zero Redundancy Principle:**
+- Apps exist on virtual desktops ONLY
+- Panel contains system controls ONLY
+- No duplicates across desktops/panels/menus
+
+**Anti-Xbox Design:**
+- Reject nested menus and bloated interfaces
+- Direct access: One gamepad button per function
+- Clean, minimal panel surface
+
+## Recommended Panel Configuration
+
+### Panel Position
+- **Location:** Bottom (default) or Top (user preference)
+- **Height:** 44-48px (readable on TV from couch distance)
+- **Auto-hide:** Disabled (always visible for status monitoring)
+
+### Panel Widgets (Left to Right)
+
+#### 1. Virtual Desktop Pager
+**Purpose:** Show current desktop, allow switching  
+**Configuration:**
+- Display: Desktop names (Streaming, Games, Music, AI & Social)
+- Rows: 1 (horizontal layout)
+- Clicking: Switches desktop
+- Gamepad: D-Pad switches (via AntiMicroX Ctrl+F1/F2/F3/F4)
+
+**Manual Setup:**
+1. Right-click panel → Add Widgets
+2. Search: "Pager" → Drag to panel (far left)
+3. Right-click Pager → Configure Pager
+4. Text display: Desktop name
+5. Pager layout: One row
+
+#### 2. System Tray
+**Purpose:** System status icons (volume, network, Bluetooth, notifications)  
+**Configuration:**
+- Shown icons: Volume, Network, Bluetooth, Notifications, Clipboard (optional)
+- Hidden icons: None critical hidden
+- Expanding: Click to show more options
+
+**Manual Setup:**
+1. Usually present by default
+2. Right-click System Tray → Configure System Tray
+3. Entries: Set to "Shown" for: Volume, Network, Bluetooth, Notifications
+4. Icon size: Medium (visible from TV distance)
+
+#### 3. Digital Clock
+**Purpose:** Display time and date  
+**Configuration:**
+- Show date: Yes
+- Show seconds: Optional (cleaner without)
+- Font size: Large (18-20pt for TV)
+- Format: 12-hour or 24-hour (user preference)
+
+**Manual Setup:**
+1. Usually present by default (far right)
+2. Right-click clock → Configure Digital Clock
+3. Appearance: Show date, large font
+4. Time display: User preference
+
+#### 4. Power/Session Menu (Optional)
+**Purpose:** Quick access to logout/shutdown  
+**Configuration:**
+- If not using Application Launcher/Menu, add separate power widget
+- Alternative: Access via System Tray
+
+**Manual Setup:**
+1. Right-click panel → Add Widgets
+2. Search: "Leave" or "Session" → Drag to panel (far right, before clock)
+3. Provides: Logout, Lock, Shutdown, Restart options
+
+### Widgets to REMOVE
+
+**Application Launcher/Menu:**
+- Redundant: Apps on virtual desktops
+- Gamepad alternative: Start button mapped to Meta key opens search
+
+**Task Manager:**
+- Redundant: Select button mapped to Alt+Tab for window switching
+- No need for window list on panel
+
+**Quick Launch/Favorites:**
+- Redundant: Apps on virtual desktops
+- Zero redundancy violated if duplicated
+
+**Icons-Only Task Manager:**
+- Redundant: Desktop icons + Alt+Tab switching sufficient
+
+## Panel Configuration Steps
+
+### Step 1: Enter Edit Mode
+Right-click panel → Enter Edit Mode
+
+### Step 2: Remove Redundant Widgets
+1. Hover over Application Launcher (if present) → Click X to remove
+2. Hover over Task Manager (if present) → Click X to remove
+3. Hover over Quick Launch (if present) → Click X to remove
+
+### Step 3: Add Essential Widgets
+1. Verify Virtual Desktop Pager present (add if missing)
+2. Verify System Tray present (default)
+3. Verify Digital Clock present (default)
+4. Add Power/Session widget if needed (optional)
+
+### Step 4: Arrange Widgets
+**Recommended Order (Left to Right):**
+```
+[Virtual Desktop Pager] [System Tray] [Digital Clock]
+```
+
+Alternative with Power widget:
+```
+[Virtual Desktop Pager] [System Tray] [Power/Session] [Digital Clock]
+```
+
+### Step 5: Configure Widget Sizes
+1. Digital Clock: Right-click → Configure → Font size 18-20pt
+2. Pager: Right-click → Configure → Text display: Desktop name
+3. System Tray: Right-click → Configure → Icon size: Medium
+
+### Step 6: Exit Edit Mode
+Right-click panel → Exit Edit Mode
+
+## Gamepad Navigation of Panel
+
+**Panel Access:**
+- Not directly gamepad-navigable (by design)
+- System Tray accessible via mouse pointer control (if needed)
+
+**Alternatives:**
+- **Desktop Switching:** D-Pad (AntiMicroX → Ctrl+F1/F2/F3/F4)
+- **Volume Control:** Keyboard shortcuts (Volume Up/Down keys)
+- **Notifications:** Automatic popups
+- **Power Menu:** Start button → Type "shutdown" → Enter
+
+## Visual Reference
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ [🖥️ Streaming] [🔊] [📶] [🔔] [🕐 Jan 12, 4:45 PM]          │
+└─────────────────────────────────────────────────────────────┘
+    Pager       System Tray        Clock
+```
+
+**Minimal:** Only essential system info  
+**Functional:** Every widget has unique purpose  
+**Clean:** No redundant app launchers
+
+## Testing Checklist
+
+After panel configuration:
+- [ ] Virtual Desktop Pager shows 4 desktops with names
+- [ ] Clicking pager switches desktops correctly
+- [ ] D-Pad desktop switching works (gamepad test)
+- [ ] System Tray shows volume, network, Bluetooth icons
+- [ ] Clock displays time and date (readable from couch)
+- [ ] No application launchers on panel (zero redundancy)
+- [ ] Panel height comfortable for TV viewing
+- [ ] All apps accessible via virtual desktops only
+
+## Future Enhancements (Optional)
+
+**Potential Additions:**
+- **System Monitor:** CPU/RAM/Network mini-graph (if performance monitoring desired)
+- **Media Player Controller:** Global media controls (for music playback)
+- **Weather Widget:** Current conditions (if useful)
+
+**Maintain Zero Redundancy:**
+- Only add if widget provides UNIQUE functionality
+- Never duplicate app access points
+```
+
+**Expected Output:**
+- Documentation file created at docs/architecture/PANEL_DESIGN.md
+- Comprehensive manual configuration guide
+- Zero redundancy design philosophy explained
+- Step-by-step panel setup instructions
+
+**Verification Criteria:**
+- [ ] File created in correct location
+- [ ] Includes panel widget recommendations
+- [ ] Includes removal instructions for redundant widgets
+- [ ] Includes manual configuration steps
+- [ ] Includes gamepad navigation notes
+- [ ] Includes visual reference
+- [ ] Includes testing checklist
+
+**Response Constraints:**
+- MAX 100 WORDS in completion response
+- Confirm file created
+- Update handoff.md with results
+- Update token_usage_tracker.md
+
+**Constraints:**
+- Create documentation file
+- Do NOT modify panel configuration
+- Update handoff.md (≤100 words)
+- Update token_usage_tracker.md
+
+**Invocation Command:**
+```bash
+cd ~/.gemini
+gemini "Read ~/Media_Hub/handoff.md and execute Task 2026-01-12-005. Create PANEL_DESIGN.md documentation."
+```
+
+---

@@ -1,7 +1,7 @@
 # Token Usage Tracker - Media Hub Project
 
 **Project Start:** 2026-01-09
-**Last Updated:** 2026-01-11 11:35
+**Last Updated:** 2026-01-13 14:20
 
 ---
 
@@ -9,10 +9,10 @@
 
 | Agent | Session Tokens | Total Project Tokens | Percentage |
 |-------|---------------|---------------------|------------|
-| Claude | 102,147 | 102,147 | 78.1% |
+| Claude | 102,147 | 102,147 | 64.9% |
 | Grok | 324 | 324 | 0.2% |
-| Gemini | 32,050 | 32,050 | 23.8% |
-| **TOTAL** | **134,521** | **134,521** | **100%** |
+| Gemini | 55,050 | 55,050 | 34.9% |
+| **TOTAL** | **157,521** | **157,521** | **100%** |
 
 ---
 
@@ -45,8 +45,8 @@
 ### Phase 4: Gamepad Configuration
 - Claude: 0 tokens
 - Grok: 0 tokens
-- Gemini: 3,000 tokens
-- **Subtotal:** 3,000 tokens
+- Gemini: 8,500 tokens
+- **Subtotal:** 8,500 tokens
 
 ### Phase 5: Media Server Installation
 - Claude: 0 tokens
@@ -75,8 +75,8 @@
 ### Phase 9: Testing & Optimization
 - Claude: 0 tokens
 - Grok: 0 tokens
-- Gemini: 1,250 tokens
-- **Subtotal:** 1,250 tokens
+- Gemini: 18,750 tokens
+- **Subtotal:** 18,750 tokens
 
 ---
 
@@ -231,6 +231,30 @@
 **Task:** 2026-01-11-011 - Initialize git repo and docs
 **Tokens Used:** 2,500
 **Cumulative:** 134,521
+
+### 2026-01-12 09:10
+**Agent:** Gemini
+**Task:** 2026-01-12-001 - Create configure_gamepad.sh
+**Tokens Used:** 3,000
+**Cumulative:** 137,521
+
+### 2026-01-12 09:25
+**Agent:** Gemini
+**Task:** 2026-01-12-003 - Create setup_desktop_launchers.sh
+**Tokens Used:** 2,500
+**Cumulative:** 140,021
+
+### 2026-01-13 14:05
+**Agent:** Gemini
+**Task:** 2026-01-13-001 - Create fix_desktop_launchers.sh
+**Tokens Used:** 15,000
+**Cumulative:** 155,021
+
+### 2026-01-13 14:15
+**Agent:** Gemini
+**Task:** 2026-01-13-002 - Overwrite fix_desktop_launchers.sh
+**Tokens Used:** 2,500
+**Cumulative:** 157,521
 
 ---
 
